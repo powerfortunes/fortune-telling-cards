@@ -79,7 +79,7 @@ For more details about the code powering this GitHub code, please go to, https:/
 
 The PowerFortunes.com privacy policy can be found at, https://www.powerfortunes.com/privacy-policy.php
 
-This code is also available as a Wordpress plugin. Search for PowerFortunes on, https://wordpress.org/plugins/
+This code is also available as a Wordpress plugin at, https://wordpress.org/plugins/daily-fortune-telling-cards/
 
 == Changelog ==
 New version 1.1.0
