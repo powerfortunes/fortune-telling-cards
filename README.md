@@ -22,27 +22,46 @@ The Daily Fortune Telling Cards GitHub code is free software: You can redistribu
 ADD THESE CARDS TO A WEB PAGE
 Embed the HTML code shown below into your webpage/template. The cards will appear where this HTML code is inserted.
  
-1. To display weekly predictions for all twelve zodiac signs, use:
+1. To display daily predictions for all twelve zodiac signs, use:
 <!-- Start of Code for All 12 Zodiac Signs -->
-<!-- Place this in the <HEAD> of your webpage: -->
-<<<<<<< .mine
-<script src="https://www.powerfortunes.com/amp/js/daily-fortunetellingcards.js"></script>
-||||||| .r3
-<script type="text/javascript" src="https://www.powerfortunes.com/amp/js/frame_siz_cli.js"></script>
-=======
 <!-- Place this in the <BODY> of your webpage: -->
-<script>loadCards("","");</script>
-<div id="fortunetellingcards" style="position:relative;width:auto;height:100%;padding-top:2%;overflow:hidden;clear:both;"></div>
+<script>loadCards("", "", "");</script>
+<div id="fortunetellingcards" style="position: relative; width: auto; height: 100%; padding-top: 2%; overflow: hidden; clear: both"></div>
 <!-- End of Code for All 12 Zodiac Signs -->
-
-2. To display weekly predictions for an individual zodiac signs, use:
-<!-- Start of Code for Individual Zodiac Signs -->
-<!-- Place this in the <HEAD> of your webpage: -->
-<script src="https://www.powerfortunes.com/amp/js/daily-fortunetellingcards.js"></script>
-<!-- Place this in the <BODY> of your webpage: -->
-<script>loadCards("","REPLACE WITH A ZODIAC SIGN");</script>
-<div id="fortunetellingcards" style="position:relative;width:auto;height:100%;padding-top:2%;overflow:hidden;clear:both;"></div>
-<!-- End of Code for Individual Zodiac Signs -->
+<!-- Place this before the closing </BODY> tag or in an external JS file -->
+<script>
+  var typ = '';
+  var sign = '';
+  var req_from = '';
+  async function loadCards(typ, sgn, req_from) {
+    if (typ === '') {
+      typ = 'daily';
+    }
+    var loc = 'https://planets.powerfortunes.com/xml/';
+    if (sgn !== '') {
+      sign = '?sun-sign=' + sgn;
+    }
+    var allCreds = '';
+    if (req_from === '' || req_from !== 'deny') {
+      allCreds = '';
+    } else if (sign !== '') {
+      allCreds = '&refr=deny';
+    } else if (sign === '') {
+      allCreds = '?refr=deny';
+    }
+    var uri = loc + typ + '-fortunetelling-cards.php' + sign + allCreds;
+    try {
+      const response = await fetch(uri);
+      const text = await response.text();
+      document.getElementById('fortunetellingcards').insertAdjacentHTML('beforeend', text);
+    } catch (error) {
+      console.error('Error loading cards:', error);
+    }
+  }
+</script>
+2. To display daily predictions for any one of the twelve zodiac signs, use:
+<script>loadCards("Sign", "", "");</script>
+Replace "Sign" with the zodiac sign to be shown, e.g. <script>loadCards("Aries","");</script>
 
 == Frequently Asked Questions ==
 
