@@ -4,44 +4,47 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>PowerFortunes.com Individual Daily Fortune Telling Cards</title>
 <meta name="description" content="Example page to display the PowerFortunes.com Daily Fortune Telling Cards for each individual zodiac sign on a single webpage.">
+<!-- Place this in the <head> tag or in an external JS file -->
+<script>
+async function loadCards(typ, req_from = ''){
+if (typ === '') {
+typ = 'daily';
+}
+
+var loc = 'https://planets.powerfortunes.com/xml/';
+var elements = document.querySelectorAll('.fortunetellingcards');
+
+for (let el of elements) {
+let sgn = el.getAttribute('data-sign');
+let signParam = sgn ? '?sun-sign=' + sgn : '';
+var allCreds = '';
+if (req_from === '' || req_from !== 'deny') {
+allCreds = '';
+} else if (signParam !== '') {
+allCreds = '&refr=deny';
+} else {
+allCreds = '?refr=deny';
+}
+
+var uri = loc + typ + '-fortunetelling-cards.php' + signParam + allCreds;
+
+try {
+const response = await fetch(uri);
+const text = await response.text();
+el.insertAdjacentHTML('beforeend', text);
+} catch (error) {
+console.error('Error loading cards for sign ' + sgn + ':', error);
+}
+}
+}
+</script>
 </head>
 
 <body>
-<!-- Start of Code for All 12 Zodiac Signs -->
+<!-- Start of Code for a single Zodiac Sign -->
 <!-- Place this in the <BODY> of your webpage: -->
+<div class="fortunetellingcards" data-sign="" style="position: relative; width: auto; height: 100%; padding-top: 2%; overflow: hidden; clear: both"></div>
+<!-- End of Code for a single Zodiac Sign -->
 <script>loadCards("Aries","");</script>
-<div id="fortunetellingcards" style="position: relative; width: auto; height: 100%; padding-top: 2%; overflow: hidden; clear: both"></div>
-<!-- End of Code for All 12 Zodiac Signs -->
-<!-- Place this before the closing </BODY> tag or in an external JS file -->
-<script>
-  var typ = '';
-  var sign = '';
-  var req_from = '';
-  async function loadCards(typ, sgn, req_from) {
-    if (typ === '') {
-      typ = 'daily';
-    }
-    var loc = 'https://planets.powerfortunes.com/xml/';
-    if (sgn !== '') {
-      sign = '?sun-sign=' + sgn;
-    }
-    var allCreds = '';
-    if (req_from === '' || req_from !== 'deny') {
-      allCreds = '';
-    } else if (sign !== '') {
-      allCreds = '&refr=deny';
-    } else if (sign === '') {
-      allCreds = '?refr=deny';
-    }
-    var uri = loc + typ + '-fortunetelling-cards.php' + sign + allCreds;
-    try {
-      const response = await fetch(uri);
-      const text = await response.text();
-      document.getElementById('fortunetellingcards').insertAdjacentHTML('beforeend', text);
-    } catch (error) {
-      console.error('Error loading cards:', error);
-    }
-  }
-</script>
 </body>
 </html>
