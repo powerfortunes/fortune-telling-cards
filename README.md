@@ -25,42 +25,45 @@ Embed the HTML code shown below into your webpage/template. The cards will appea
 1. To display daily predictions for all twelve zodiac signs, use:
 <!-- Start of Code for All 12 Zodiac Signs -->
 <!-- Place this in the <BODY> of your webpage: -->
-<script>loadCards("", "", "");</script>
-<div id="fortunetellingcards" style="position: relative; width: auto; height: 100%; padding-top: 2%; overflow: hidden; clear: both"></div>
+<div class="fortunetellingcards" style="position: relative; width: auto; height: 100%; padding-top: 2%; overflow: hidden; clear: both"></div>
+<script>loadCards("","");</script>
 <!-- End of Code for All 12 Zodiac Signs -->
-<!-- Place this before the closing </BODY> tag or in an external JS file -->
+<!-- Place this in the <head> of your page or in an external JS file -->
 <script>
-  var typ = '';
-  var sign = '';
-  var req_from = '';
-  async function loadCards(typ, sgn, req_from) {
-    if (typ === '') {
-      typ = 'daily';
-    }
-    var loc = 'https://planets.powerfortunes.com/xml/';
-    if (sgn !== '') {
-      sign = '?sun-sign=' + sgn;
-    }
-    var allCreds = '';
-    if (req_from === '' || req_from !== 'deny') {
-      allCreds = '';
-    } else if (sign !== '') {
-      allCreds = '&refr=deny';
-    } else if (sign === '') {
-      allCreds = '?refr=deny';
-    }
-    var uri = loc + typ + '-fortunetelling-cards.php' + sign + allCreds;
-    try {
-      const response = await fetch(uri);
-      const text = await response.text();
-      document.getElementById('fortunetellingcards').insertAdjacentHTML('beforeend', text);
-    } catch (error) {
-      console.error('Error loading cards:', error);
-    }
-  }
+async function loadCards(typ, req_from = ''){
+if (typ === '') {
+typ = 'daily';
+}
+
+var loc = 'https://planets.powerfortunes.com/xml/';
+var elements = document.querySelectorAll('.fortunetellingcards');
+
+for (let el of elements) {
+let sgn = el.getAttribute('data-sign');
+let signParam = sgn ? '?sun-sign=' + sgn : '';
+var allCreds = '';
+if (req_from === '' || req_from !== 'deny') {
+allCreds = '';
+} else if (signParam !== '') {
+allCreds = '&refr=deny';
+} else {
+allCreds = '?refr=deny';
+}
+
+var uri = loc + typ + '-fortunetelling-cards.php' + signParam + allCreds;
+
+try {
+const response = await fetch(uri);
+const text = await response.text();
+el.insertAdjacentHTML('beforeend', text);
+} catch (error) {
+console.error('Error loading cards for sign ' + sgn + ':', error);
+}
+}
+}
 </script>
 2. To display daily predictions for any one of the twelve zodiac signs, use:
-<script>loadCards("Sign", "", "");</script>
+<script>loadCards("Sign", "");</script>
 Replace "Sign" with the zodiac sign to be shown, e.g. <script>loadCards("Aries","");</script>
 
 == Frequently Asked Questions ==
